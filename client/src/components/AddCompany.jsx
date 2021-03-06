@@ -1,21 +1,49 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+
+import CompanyFinder from '../apis/CompanyFinder';
+import { CompaniesContext } from '../context/CompaniesContext';
 
 const AddCompany = () => {
-  const [values, setValues] = useState({});
+  const { addCompany } = useContext(CompaniesContext);
+  const [values, setValues] = useState({
+    name: '',
+    location: '',
+    priceRange: 'Price Range',
+  });
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await CompanyFinder.post('/', {
+        name: values.name,
+        location: values.location,
+        price_range: values.priceRange,
+      });
+      addCompany(response.data.data.company);
+      setValues({
+        name: '',
+        location: '',
+        priceRange: 'Price Range',
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
   return (
     <div className='container-xl'>
-      <form>
+      <form onSubmit={onSubmit}>
         <div className='row justify-content-start'>
           <div className='col'>
             <input
               className='form-control'
               type='text'
               placeholder='Name'
+              name='name'
               value={values.username}
               onChange={onChange}
             />
@@ -25,6 +53,7 @@ const AddCompany = () => {
               className='form-control'
               type='text'
               placeholder='Location'
+              name='location'
               value={values.location}
               onChange={onChange}
             />
@@ -32,7 +61,7 @@ const AddCompany = () => {
           <div className='col'>
             <select
               className='form-select'
-              defaultValue={'Price Range'}
+              name='priceRange'
               value={values.priceRange}
               onChange={onChange}
             >
