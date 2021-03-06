@@ -11,7 +11,7 @@ const App = () => {
     <CompaniesContextProvider>
       <div
         style={{
-          background: 'linear-gradient(to bottom, #6600cc 0%, #ff9966 100%)',
+          background: 'linear-gradient(360deg,#949494 10%,#efefef 360%)',
           width: '100vw',
           height: '100vh',
         }}
