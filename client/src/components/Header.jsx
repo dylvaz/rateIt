@@ -2,14 +2,15 @@ import React from 'react';
 
 const Header = () => {
   return (
-    <div>
+    <>
       <h1
-        className='fw-light display-1 text-center'
-        style={{ color: 'whitesmoke' }}
+        className='fw-lighter display-1 text-center'
+        style={{ paddingTop: '30px' }}
       >
         Company Reviewer
       </h1>
-    </div>
+      <hr style={{ marginBottom: '30px' }}></hr>
+    </>
   );
 };
 
