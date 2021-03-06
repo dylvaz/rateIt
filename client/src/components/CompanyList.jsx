@@ -1,10 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-
+import { useHistory } from 'react-router-dom';
 import CompanyFinder from '../apis/CompanyFinder';
 import { CompaniesContext } from '../context/CompaniesContext';
 
-const CompanyList = () => {
+const CompanyList = (props) => {
   const { companies, setCompanies } = useContext(CompaniesContext);
+  let history = useHistory();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,6 +16,25 @@ const CompanyList = () => {
     };
     fetchData();
   }, [setCompanies]);
+
+  const deleteEntry = async (id, name) => {
+    try {
+      if (
+        window.confirm(
+          `Are you sure you want to delete ${name} and it's reviews?`
+        )
+      ) {
+        await CompanyFinder.delete(`/${id}`);
+        setCompanies(companies.filter((company) => company.id !== id));
+      }
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  const updateLink = (id) => {
+    history.push(`/companies/${id}/update`);
+  };
 
   return (
     <div className='container-xxl'>
@@ -40,10 +60,24 @@ const CompanyList = () => {
                     <td>{'$'.repeat(company.price_range)}</td>
                     <td>Reviews</td>
                     <td>
-                      <button className='btn btn-danger'>Update</button>
+                      <button
+                        className='btn btn-warning'
+                        onClick={() => {
+                          updateLink(company.id);
+                        }}
+                      >
+                        Update
+                      </button>
                     </td>
                     <td>
-                      <button className='btn btn-danger'>Delete</button>
+                      <button
+                        className='btn btn-danger'
+                        onClick={() => {
+                          deleteEntry(company.id, company.name);
+                        }}
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 );
