@@ -17,8 +17,9 @@ const CompanyList = (props) => {
     fetchData();
   }, [setCompanies]);
 
-  const deleteEntry = async (id, name) => {
+  const deleteEntry = async (e, id, name) => {
     try {
+      e.stopPropagation();
       if (
         window.confirm(
           `Are you sure you want to delete ${name} and it's reviews?`
@@ -32,8 +33,14 @@ const CompanyList = (props) => {
     }
   };
 
-  const updateLink = (id) => {
+  const updateLink = (e, id) => {
+    e.stopPropagation();
     history.push(`/companies/${id}/update`);
+  };
+
+  const handleCompanySelect = (e, id) => {
+    e.stopPropagation();
+    history.push(`/companies/${id}`);
   };
 
   return (
@@ -54,7 +61,12 @@ const CompanyList = (props) => {
             {companies &&
               companies.map((company) => {
                 return (
-                  <tr key={company.id}>
+                  <tr
+                    onClick={(e) => {
+                      handleCompanySelect(e, company.id);
+                    }}
+                    key={company.id}
+                  >
                     <td>{company.name}</td>
                     <td>{company.location}</td>
                     <td>{'$'.repeat(company.price_range)}</td>
@@ -62,8 +74,8 @@ const CompanyList = (props) => {
                     <td>
                       <button
                         className='btn btn-warning'
-                        onClick={() => {
-                          updateLink(company.id);
+                        onClick={(e) => {
+                          updateLink(e, company.id);
                         }}
                       >
                         Update
@@ -72,8 +84,8 @@ const CompanyList = (props) => {
                     <td>
                       <button
                         className='btn btn-danger'
-                        onClick={() => {
-                          deleteEntry(company.id, company.name);
+                        onClick={(e) => {
+                          deleteEntry(e, company.id, company.name);
                         }}
                       >
                         Delete
