@@ -1,5 +1,7 @@
 import React from 'react';
 
+import UpdateForm from '../components/UpdateForm/UpdateForm';
+
 const UpdateCompany = () => {
   return (
     <>
@@ -7,9 +9,10 @@ const UpdateCompany = () => {
         className='fw-lighter display-1 text-center'
         style={{ paddingTop: '30px' }}
       >
-        Update Restaurant
+        Update Company
       </h1>
       <hr style={{ marginBottom: '30px' }}></hr>
+      <UpdateForm />
     </>
   );
 };
