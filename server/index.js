@@ -11,11 +11,11 @@ const app = express();
 const port = process.env.PORT || 1234;
 
 //Middlewares
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(helmet());
-app.use(cors());
 
 //Get all companies
 app.get('/api/v1/companies', async (req, res) => {
