@@ -100,6 +100,24 @@ app.delete('/api/v1/companies/:id', async (req, res) => {
   }
 });
 
+//Adding a review
+app.post('/api/v1/companies/:id/reviews', async (req, res) => {
+  try {
+    const results = await db.query(
+      'INSERT INTO reviews (company_id, name, body, rating) VALUES ($1, $2, $3, $4) RETURNING *',
+      [req.params.id, req.body.name, req.body.body, req.body.rating]
+    );
+    res.status(201).json({
+      results: results.rows.length,
+      data: {
+        reviews: results.rows[0],
+      },
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+});
+
 //More middlewares
 app.use(notFound);
 app.use(errHandler);
