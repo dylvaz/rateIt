@@ -44,7 +44,7 @@ const AddCompany = () => {
               type='text'
               placeholder='Name'
               name='name'
-              value={values.username}
+              value={values.name}
               onChange={onChange}
             />
           </div>
