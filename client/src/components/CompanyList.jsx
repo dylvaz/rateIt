@@ -1,7 +1,9 @@
 import React, { useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+
 import CompanyFinder from '../apis/CompanyFinder';
 import { CompaniesContext } from '../context/CompaniesContext';
+import StarRating from './StarRating';
 
 const CompanyList = (props) => {
   const { companies, setCompanies } = useContext(CompaniesContext);
@@ -43,6 +45,18 @@ const CompanyList = (props) => {
     history.push(`/companies/${id}`);
   };
 
+  const renderRatingAndCount = (company) => {
+    if (!company.count) {
+      return <span className='text-warning'>0 reviews</span>;
+    }
+    return (
+      <>
+        <StarRating rating={company.average_rating} />
+        <span className='text warning ml-1'>({company.count})</span>
+      </>
+    );
+  };
+
   return (
     <div className='container-xxl'>
       <div className='list-group' style={{ marginTop: '20px' }}>
@@ -52,7 +66,7 @@ const CompanyList = (props) => {
               <th scope='col'>Company</th>
               <th scope='col'>Location</th>
               <th scope='col'>Price Range</th>
-              <th scope='col'>Ratings</th>
+              <th scope='col'>Ratings (# of ratings)</th>
               <th scope='col'>Edit</th>
               <th scope='col'>Delete</th>
             </tr>
@@ -70,7 +84,7 @@ const CompanyList = (props) => {
                     <td>{company.name}</td>
                     <td>{company.location}</td>
                     <td>{'$'.repeat(company.price_range)}</td>
-                    <td>Reviews</td>
+                    <td>{renderRatingAndCount(company)}</td>
                     <td>
                       <button
                         className='btn btn-warning'
