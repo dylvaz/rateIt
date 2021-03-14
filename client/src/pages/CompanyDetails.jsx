@@ -33,8 +33,8 @@ const CompanyDetails = () => {
           </h1>
           <div className='container-fluid'>
             <Reviews reviews={selectedCompany.reviews} />
+            <AddReview id={id} />
           </div>
-          <AddReview />
         </>
       )}
     </div>
