@@ -20,11 +20,13 @@ app.use(helmet());
 //Get all companies
 app.get('/api/v1/companies', async (req, res) => {
   try {
-    const results = await db.query('SELECT * FROM companies');
+    const companyRatingsData = await db.query(
+      'select * from companies left join (select company_id, count(*), trunc(avg(rating),1) as average_rating from reviews group by company_id) reviews on companies.id = reviews.company_id'
+    );
     res.status(200).json({
-      results: results.rows.length,
+      results: companyRatingsData.rows.length,
       data: {
-        companies: results.rows,
+        companies: companyRatingsData.rows,
       },
     });
   } catch (err) {
@@ -35,9 +37,11 @@ app.get('/api/v1/companies', async (req, res) => {
 //Get one company
 app.get('/api/v1/companies/:id', async (req, res) => {
   try {
-    const company = await db.query('SELECT * FROM companies WHERE id = $1', [
-      req.params.id,
-    ]);
+    const company = await db.query(
+      'select * from companies left join (select company_id, count(*), trunc(avg(rating),1) as average_rating from reviews group by company_id) reviews on companies.id = reviews.company_id where id = $1',
+      [req.params.id]
+    );
+
     const reviews = await db.query(
       'SELECT * FROM reviews WHERE company_id = $1',
       [req.params.id]
