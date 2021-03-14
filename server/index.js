@@ -35,13 +35,18 @@ app.get('/api/v1/companies', async (req, res) => {
 //Get one company
 app.get('/api/v1/companies/:id', async (req, res) => {
   try {
-    const results = await db.query('SELECT * FROM companies WHERE id = $1', [
+    const company = await db.query('SELECT * FROM companies WHERE id = $1', [
       req.params.id,
     ]);
+    const reviews = await db.query(
+      'SELECT * FROM reviews WHERE company_id = $1',
+      [req.params.id]
+    );
+
     res.status(200).json({
-      results: results.rows.length,
       data: {
-        company: results.rows[0],
+        company: company.rows[0],
+        reviews: reviews.rows,
       },
     });
   } catch (err) {
