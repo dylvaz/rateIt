@@ -1,19 +1,37 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
 
-const AddReview = () => {
+import CompanyFinder from '../apis/CompanyFinder';
+
+const AddReview = ({ id }) => {
+  const history = useHistory();
   const [values, setValues] = useState({
     name: '',
+    body: '',
     rating: 'Rating',
-    review: '',
   });
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(values);
+    try {
+      await CompanyFinder.post(`/${id}/reviews`, {
+        name: values.name,
+        body: values.body,
+        rating: values.rating,
+      });
+      setValues({
+        name: '',
+        body: '',
+        rating: 'Rating',
+      });
+      history.go(0);
+    } catch (err) {
+      throw new Error(err);
+    }
   };
 
   return (
@@ -58,15 +76,17 @@ const AddReview = () => {
         <div>
           <label htmlFor='Review'>Review</label>
           <textarea
-            id='review'
+            id='body'
             className='form-control'
-            name='review'
-            value={values.review}
+            name='body'
+            value={values.body}
             onChange={onChange}
           ></textarea>
         </div>
         <div className='d-flex justify-content-center mt-4'>
-          <button className='btn btn-primary btn-lg px-5 '>Submit</button>
+          <button type='submit' className='btn btn-primary btn-lg px-5 '>
+            Submit
+          </button>
         </div>
       </form>
     </div>
