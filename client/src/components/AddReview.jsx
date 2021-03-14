@@ -47,7 +47,7 @@ const AddReview = ({ id }) => {
             <input
               id='name'
               name='name'
-              placeholder='Company Name'
+              placeholder='Name'
               type='text'
               className='form-control'
               value={values.name}
