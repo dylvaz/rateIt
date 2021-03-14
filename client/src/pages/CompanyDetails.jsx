@@ -23,14 +23,14 @@ const CompanyDetails = () => {
 
   return (
     <div>
-      <h1
-        className='fw-lighter display-1 text-center'
-        style={{ paddingTop: '30px' }}
-      >
-        {selectedCompany.company.name}
-      </h1>
-      {selectedCompany && (
+      {selectedCompany.company && (
         <>
+          <h1
+            className='fw-lighter display-1 text-center'
+            style={{ paddingTop: '30px' }}
+          >
+            {selectedCompany.company.name}
+          </h1>
           <div className='container-fluid'>
             <Reviews reviews={selectedCompany.reviews} />
           </div>
